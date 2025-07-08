@@ -66,15 +66,11 @@ class Quiz extends Model implements HasMedia
     ];
 
     const TEXT_TYPE = 1;
-
     const SUBJECT_TYPE = 2;
-
     const URL_TYPE = 3;
-
     const UPLOAD_TYPE = 4;
 
     const TIME_OVER_QUESTION = 1;
-
     const TIME_OVER_QUIZ = 2;
 
     const QUIZ_INPUT_TYPE = [
@@ -85,7 +81,6 @@ class Quiz extends Model implements HasMedia
     ];
 
     const OPEN_AI = 1;
-
     const GEMINI_AI = 2;
 
     const AI_TYPES = [
@@ -105,6 +100,7 @@ class Quiz extends Model implements HasMedia
 
     const MULTIPLE_CHOICE = 0;
     const SINGLE_CHOICE = 1;
+
     const QUIZ_TYPE = [
         self::MULTIPLE_CHOICE => 'Multiple Choices',
         self::SINGLE_CHOICE => 'Single Choice',
@@ -113,8 +109,8 @@ class Quiz extends Model implements HasMedia
     public static function getQuizTypeOptions()
     {
         return [
-            0 => __('messages.home.multiple_choice'),
-            1 => __('messages.home.single_choice'),
+            self::MULTIPLE_CHOICE => __('messages.home.multiple_choice'),
+            self::SINGLE_CHOICE => __('messages.home.single_choice'),
         ];
     }
 
@@ -158,7 +154,7 @@ class Quiz extends Model implements HasMedia
         return $this->belongsTo(Category::class);
     }
 
-    public static function  getForm(): array
+    public static function getForm(): array
     {
         return [
             Section::make()
@@ -183,14 +179,14 @@ class Quiz extends Model implements HasMedia
                                             ->searchable()
                                             ->required()
                                             ->preload()
-                                            ->native(false)
+                                            ->native(false),
                                     ]),
                                     Section::make()
                                         ->schema([
                                             Select::make('quiz_type')
                                                 ->label(__('messages.quiz.question_type') . ':')
-                                                ->options(Quiz::getQuizTypeOptions())
-                                                ->default(0)
+                                                ->options(self::getQuizTypeOptions())
+                                                ->default(self::MULTIPLE_CHOICE)
                                                 ->searchable()
                                                 ->required()
                                                 ->preload()
@@ -200,7 +196,7 @@ class Quiz extends Model implements HasMedia
                                                 ->validationAttribute(__('messages.quiz.question_type')),
                                             Select::make('diff_level')
                                                 ->label(__('messages.quiz.difficulty') . ':')
-                                                ->options(Quiz::getDiffLevelOptions())
+                                                ->options(self::getDiffLevelOptions())
                                                 ->default(0)
                                                 ->required()
                                                 ->searchable()
